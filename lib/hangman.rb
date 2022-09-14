@@ -143,7 +143,7 @@ class Intro
     puts "\nMenu:
     1: Play new game
     2. Load saved game
-    3: Help/How to Play
+    3: Help/How to play
     4: Quit"
   end
 
@@ -368,4 +368,3 @@ end
 game = Hangman.new
 game.new_game
 
-# Need finish implementing menu/navigation

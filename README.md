@@ -5,6 +5,14 @@ Toy command line Hangman game implemented with `ruby` using OOP and mixins. Incl
 * [Hangman wiki](https://en.wikipedia.org/wiki/Hangman_(game))
 * [Google 10000 english dictionary file](https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-no-swears.txt)
 
+### Work in Progress / To Do
+* Need finish implementing menu/navigation
+  * Load saved game
+  * Help/How to Play
+  * Save game
+* Need finish implementing marshalling
+* Make use of begin/rescue/else blocks for parsing input and serialization
+
 ### Example Game
 ```
   +---+ ██╗  ██╗ █████╗ ███╗   ██╗ ██████╗ ███╗   ███╗ █████╗ ███╗   ██╗
