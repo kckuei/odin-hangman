@@ -368,3 +368,24 @@ end
 game = Hangman.new
 game.new_game
 
+# # Test serialize and write game state to file
+# str = Marshal.dump(game)
+# file = File.open('test.hangman', 'w')
+# file.puts(str)
+# file.close
+
+# # Test read file and deserialize game state
+# file = File.open('test.hangman', 'r')
+# str = file.read
+# file.close
+# game = Marshal.load(str)
+# game.continue
+
+# dirname = "data-files"
+# Dir.mkdir(dirname) unless File.exists?dirname
+# File.open("#{dirname}/new-file.txt", 'w'){|f| f.write('Hello world!')}
+
+# # list just PDF files, either with .pdf or .PDF extensions:
+# puts Dir.glob('Downloads/*.{pdf,PDF}').join(",\n")
+
+# Dir.glob('./*.{hangman}')
