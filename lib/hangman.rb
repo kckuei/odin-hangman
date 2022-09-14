@@ -104,7 +104,10 @@ module Query
     input = gets.downcase.chomp
     loop do
       if guessing_word?(input)
-        break if valid_word_input?(input)
+        if valid_word_input?(input)
+          input = input.split(' ')[1]
+          break
+        end
       elsif letter?(input)
         break
       end
@@ -166,7 +169,7 @@ class Dictionary
   end
 end
 
-# Serializer class
+# Serializer class - placeholder, will be use for saving/loading game
 class Serializer; end
 
 # Display class
@@ -191,6 +194,10 @@ class Computer < Player
   def choose_word(dictionary)
     @word = dictionary.random_word
   end
+
+  def right_word?(word)
+    word == @word
+  end
 end
 
 # Human class
@@ -199,10 +206,20 @@ class Human < Player
 
   def initialize
     super
+    @guesses = Hash.new(0)
   end
 
   def make_guess
-    user_input
+    guess = user_input
+    loop do
+      if @guesses[guess].zero?
+        @guesses[guess] += 1
+        break
+      else
+        puts "You already guessed `#{guess}`!"
+        guess = user_input
+      end
+    end
   end
 end
 
@@ -216,3 +233,10 @@ word = computer.choose_word(game.dict)
 puts "Chosen word is: #{word}"
 
 player.make_guess
+player.make_guess
+
+### Need to keep track of guesses
+### word guesses 'you already guessed that word!'
+### letter guesses 'you already guessed that letter!'
+
+### Displaying the hangman, and letters
