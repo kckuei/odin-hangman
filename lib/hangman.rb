@@ -144,8 +144,7 @@ class Intro
     1: Play new game
     2. Load saved game
     3: Help/How to Play
-    4. Leaderboard
-    5: Quit"
+    4: Quit"
   end
 
   def show_outro_menu
