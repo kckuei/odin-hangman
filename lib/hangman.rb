@@ -60,6 +60,10 @@ module Graphics
  / \\  |
       |
 ========="]
+
+  def show_hangman(index)
+    puts HANGMANPICS[index]
+  end
 end
 
 # Query module
@@ -100,7 +104,7 @@ module Query
   end
 
   def user_input
-    puts valid_input
+    puts "\n #{valid_input}"
     input = gets.downcase.chomp
     loop do
       if guessing_word?(input)
@@ -173,7 +177,32 @@ end
 class Serializer; end
 
 # Display class
-class Display; end
+class Display
+  include Graphics
+
+  def initialize(word)
+    @word = word
+  end
+
+  # instance methods
+  def render(guesses)
+    show_hangman(guesses.length)
+
+    if guesses.key?(@word)
+      puts @word.upcase.split('').join(' ')
+    else
+      output = ''
+      Array(@word.split('')).each do |char|
+        output << if guesses[char].positive?
+                    "#{char.upcase} "
+                  else
+                    '_ '
+                  end
+      end
+      puts output
+    end
+  end
+end
 
 # Player class
 class Player
@@ -202,6 +231,8 @@ end
 
 # Human class
 class Human < Player
+  attr_reader :guesses
+
   include Query
 
   def initialize
@@ -232,11 +263,11 @@ player = Human.new
 word = computer.choose_word(game.dict)
 puts "Chosen word is: #{word}"
 
-player.make_guess
-player.make_guess
+display = Display.new(word)
 
-### Need to keep track of guesses
-### word guesses 'you already guessed that word!'
-### letter guesses 'you already guessed that letter!'
+display.render(player.guesses)
 
-### Displaying the hangman, and letters
+player.make_guess # first guess
+player.make_guess # second guess
+
+display.render(player.guesses)
