@@ -284,6 +284,12 @@ display.render(player.guesses)
 # 2, 3, or 4 - not implemented yet
 
 ## Implement one full game round
+# choose word
+# do-loop ...
+#  make guess
+#  display
+#  win?
+# end
 # if lose/win - continue? or exit?
 #    if continue -> to a new word
 #                   & increment user score or loss
