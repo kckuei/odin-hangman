@@ -146,7 +146,7 @@ end
 
 # Hangman class
 class Hangman
-  attr_reader :dict
+  attr_reader :dict, :intro
 
   include Graphics
 
@@ -260,12 +260,14 @@ end
 
 game = Hangman.new
 
+game.intro.game_intro
+
 computer = Computer.new
 
 player = Human.new
 
 word = computer.choose_word(game.dict)
-puts "Chosen word is: #{word}"
+puts "Computer chose a word: #{word}" # uncomment for debugging
 
 display = Display.new(word)
 
@@ -275,3 +277,17 @@ player.make_guess # first guess
 player.make_guess # second guess
 
 display.render(player.guesses)
+
+## Next implement the following functionalities...
+# 1 - new game
+# 5 - quit
+# 2, 3, or 4 - not implemented yet
+
+## Implement one full game round
+# if lose/win - continue? or exit?
+#    if continue -> to a new word
+#                   & increment user score or loss
+#    if exit     -> ask for user name for scoreboard
+
+## Implement serilization
+#
