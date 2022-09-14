@@ -104,7 +104,7 @@ module Query
   end
 
   def user_input
-    puts "\n #{valid_input}"
+    puts "\n#{valid_input}"
     input = gets.downcase.chomp
     loop do
       if guessing_word?(input)
@@ -122,25 +122,55 @@ module Query
   end
 end
 
-# Intro class
+# Intro class (maybe change to Menu/Navigation class)
 class Intro
   include Graphics
+
   def game_intro
     puts LOGO
     puts "\n\nEnter any key to continue."
     gets
-    show_menu
+    show_intro_menu
     gets
   end
 
-  def show_menu
-    puts " Menu:
+  def game_outro(game)
+    show_outro_menu
+    outro_menu_input(game)
+  end
+
+  def show_intro_menu
+    puts "\nMenu:
     1: Play new game
     2. Load saved game
     3: Help/How to Play
     4. Leaderboard
-    5: Quit
-    "
+    5: Quit"
+  end
+
+  def show_outro_menu
+    puts "\nMenu:
+    1: Continue playing
+    2. Save game
+    3: Quit"
+  end
+
+  def outro_menu_input(game)
+    choice = gets.chomp.to_i
+    case choice
+    when 1
+      game.continue
+    when 2
+      ## placeholder for save_game
+    when 3
+      exit_game
+    else
+      puts 'invalid choice'
+    end
+  end
+
+  def exit_game
+    puts "\nExiting game. Bye!"
   end
 end
 
@@ -158,31 +188,68 @@ class Hangman
     @display = nil
   end
 
+  def make_display
+    word = @computer.choose_word(@dict)
+    @display = Display.new(word)
+    puts "Computer chose a word: #{word}" # uncomment for debugging
+  end
+
   def game_over?(guesses, word)
     return true if guesses.key?(word) || word_match_by_characters?(guesses, word) || guesses.length == 6
+  end
+
+  def win?(guesses, word)
+    return true if (guesses.key?(word) || word_match_by_characters?(guesses, word)) && guesses.length <= 6
   end
 
   def word_match_by_characters?(guesses, word)
     Array(word.split('')).filter { |char| guesses.key?(char) }.length == word.length
   end
 
-  def new_game
-    @intro.game_intro
+  def increment_scores(guesses, word)
+    if win?(guesses, word)
+      @player.wins += 1
+      @computer.losses += 1
+      puts "\nPlayer wins!\n"
+    else
+      @player.losses += 1
+      @computer.wins += 1
+      puts "\nPlayer loses!"
+      puts "The correct word was: #{@computer.word.split('').join(' ')}.\n"
+    end
+    puts "\nWins:#{@player.wins}, Losses: #{@player.losses}"
+  end
 
-    word = @computer.choose_word(@dict)
-    puts "Computer chose a word: #{word}" # uncomment for debugging
-
-    @display = Display.new(word)
-
+  def play_round
     loop do
       @display.render(@player.guesses)
       @player.make_guess
       next unless game_over?(@player.guesses, @computer.word)
 
       @display.render(@player.guesses)
-      puts 'Player wins!'
+
+      increment_scores(@player.guesses, @computer.word)
       break
     end
+  end
+
+  def new_game
+    @intro.game_intro
+    make_display
+    continue
+  end
+
+  def continue
+    play_round
+    pick_new_word
+    @player.reset_guesses
+    @intro.game_outro(self)
+  end
+
+  def pick_new_word
+    word = @computer.choose_word(@dict)
+    @display.update_word(word)
+    puts "Computer chose a word: #{word}" # uncomment for debugging
   end
 end
 
@@ -236,6 +303,10 @@ class Display
   def self.show_guesses(guesses)
     puts "Guesses: #{guesses.keys.join(', ')}"
   end
+
+  def update_word(word)
+    @word = word
+  end
 end
 
 # Player class
@@ -249,6 +320,7 @@ end
 # Computer class
 class Computer < Player
   attr_reader :word
+  attr_accessor :wins, :losses
 
   def initialize
     super
@@ -267,6 +339,7 @@ end
 # Human class
 class Human < Player
   attr_reader :guesses
+  attr_accessor :wins, :losses
 
   include Query
 
@@ -287,20 +360,13 @@ class Human < Player
       end
     end
   end
+
+  def reset_guesses
+    @guesses = Hash.new(0)
+  end
 end
 
 game = Hangman.new
 game.new_game
 
-# if lose/win - continue? or exit?
-#    if continue -> to a new word
-#                   & increment user score or loss
-#    if exit     -> ask for user name for scoreboard
-
-## Next implement the following functionalities...
-# 1 - new game
-# 5 - quit
-# 2, 3, or 4 - not implemented yet
-
-## Implement serilization
-#
+# Need finish implementing menu/navigation
