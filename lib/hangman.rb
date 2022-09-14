@@ -184,23 +184,27 @@ class Display
     @word = word
   end
 
-  # instance methods
   def render(guesses)
     show_hangman(guesses.length)
+    Display.show_guesses(guesses)
 
     if guesses.key?(@word)
-      puts @word.upcase.split('').join(' ')
+      puts @word.downcase.split('').join(' ')
     else
       output = ''
       Array(@word.split('')).each do |char|
         output << if guesses[char].positive?
-                    "#{char.upcase} "
+                    "#{char.downcase} "
                   else
                     '_ '
                   end
       end
       puts output
     end
+  end
+
+  def self.show_guesses(guesses)
+    puts "Guesses: #{guesses.keys.join(', ')}"
   end
 end
 
