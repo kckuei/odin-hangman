@@ -153,6 +153,36 @@ class Hangman
   def initialize
     @intro = Intro.new
     @dict = Dictionary.new('./../dictionary/google-10000-english-no-swears.txt', 1337)
+    @player = Human.new
+    @computer = Computer.new
+    @display = nil
+  end
+
+  def game_over?(guesses, word)
+    return true if guesses.key?(word) || word_match_by_characters?(guesses, word) || guesses.length == 6
+  end
+
+  def word_match_by_characters?(guesses, word)
+    Array(word.split('')).filter { |char| guesses.key?(char) }.length == word.length
+  end
+
+  def new_game
+    @intro.game_intro
+
+    word = @computer.choose_word(@dict)
+    puts "Computer chose a word: #{word}" # uncomment for debugging
+
+    @display = Display.new(word)
+
+    loop do
+      @display.render(@player.guesses)
+      @player.make_guess
+      next unless game_over?(@player.guesses, @computer.word)
+
+      @display.render(@player.guesses)
+      puts 'Player wins!'
+      break
+    end
   end
 end
 
@@ -212,6 +242,7 @@ end
 class Player
   def initialize
     @wins = 0
+    @losses = 0
   end
 end
 
@@ -259,41 +290,17 @@ class Human < Player
 end
 
 game = Hangman.new
+game.new_game
 
-game.intro.game_intro
-
-computer = Computer.new
-
-player = Human.new
-
-word = computer.choose_word(game.dict)
-puts "Computer chose a word: #{word}" # uncomment for debugging
-
-display = Display.new(word)
-
-display.render(player.guesses)
-
-player.make_guess # first guess
-player.make_guess # second guess
-
-display.render(player.guesses)
+# if lose/win - continue? or exit?
+#    if continue -> to a new word
+#                   & increment user score or loss
+#    if exit     -> ask for user name for scoreboard
 
 ## Next implement the following functionalities...
 # 1 - new game
 # 5 - quit
 # 2, 3, or 4 - not implemented yet
-
-## Implement one full game round
-# choose word
-# do-loop ...
-#  make guess
-#  display
-#  win?
-# end
-# if lose/win - continue? or exit?
-#    if continue -> to a new word
-#                   & increment user score or loss
-#    if exit     -> ask for user name for scoreboard
 
 ## Implement serilization
 #
