@@ -237,6 +237,7 @@ class Hangman
     @dict = obj.dict
     @player = obj.player
     @computer = obj.computer
+    @serializer = obj.serializer
     @display = obj.display
   end
 

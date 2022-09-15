@@ -346,8 +346,8 @@ Menu:
     2. Save game
     3: Quit
 2
-#<Serializer:0x00007f8933d04648>
-Ran into an error when opening the hangman save file: Not a directory @ rb_sysopen - ./saves/saved_state.hangman/saved_state.hangman
+#<Serializer:0x00007f0151adad00>
+Successfully saved game...
 **Excited R2D2 noises**
 
 Menu:
