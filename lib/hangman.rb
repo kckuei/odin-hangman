@@ -164,7 +164,9 @@ class Intro
     when 3
       exit_game
     else
-      puts 'invalid choice'
+      puts "\nInvalid input: #{choice}. Pick an option from the menu."
+      show_outro_menu
+      outro_menu_input(game)
     end
   end
 
