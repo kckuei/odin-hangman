@@ -306,8 +306,36 @@ class Dictionary
   end
 end
 
-# Serializer class - placeholder, will be use for saving/loading game
-class Serializer; end
+# Serializer class
+class Serializer
+  def initialize(dirname = './saves')
+    @dirname = dirname
+  end
+
+  def serialize(game)
+    Dir.mkdir(@dirname) unless File.exist? dirname
+    str = Marshal.dump(game)
+    File.open(@dirname << '/saved_state.hangman', 'w') { |f| f.puts(str) }
+  end
+
+  def deserialize
+    file = File.open(@dirname << '/saved_state.hangman', 'r')
+  rescue StandardError => e
+    puts "Ran into an error when opening the hangman save file: #{e}"
+  else
+    str = file.read
+    file.close
+    Marshal.load(str)
+    # game = Marshal.load(str)
+    # game.continue
+  ensure
+    puts '**Excited R2D2 noises**'
+  end
+
+  def self.list_hangman_saves
+    Dir.glob(@dirname << '/*.{hangman}')
+  end
+end
 
 # Display class
 class Display
@@ -404,25 +432,3 @@ end
 
 game = Hangman.new
 game.new_game
-
-# # Test serialize and write game state to file
-# str = Marshal.dump(game)
-# file = File.open('test.hangman', 'w')
-# file.puts(str)
-# file.close
-
-# # Test read file and deserialize game state
-# file = File.open('test.hangman', 'r')
-# str = file.read
-# file.close
-# game = Marshal.load(str)
-# game.continue
-
-# dirname = "data-files"
-# Dir.mkdir(dirname) unless File.exists?dirname
-# File.open("#{dirname}/new-file.txt", 'w'){|f| f.write('Hello world!')}
-
-# # list just PDF files, either with .pdf or .PDF extensions:
-# puts Dir.glob('Downloads/*.{pdf,PDF}').join(",\n")
-
-# Dir.glob('./*.{hangman}')
