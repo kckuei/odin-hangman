@@ -220,7 +220,7 @@ class Hangman
 
   def initialize
     @intro = Intro.new
-    @dict = Dictionary.new('./../dictionary/google-10000-english-no-swears.txt', 1337)
+    @dict = Dictionary.new('./dictionary/google-10000-english-no-swears.txt', 1337)
     @player = Human.new
     @computer = Computer.new
     @serializer = Serializer.new
