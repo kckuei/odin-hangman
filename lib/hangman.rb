@@ -126,12 +126,13 @@ end
 class Intro
   include Graphics
 
-  def game_intro
+  def game_intro(game)
     puts LOGO
     puts "\n\nEnter any key to continue."
     gets
+
     show_intro_menu
-    gets
+    intro_menu_input(game)
   end
 
   def game_outro(game)
@@ -152,6 +153,38 @@ class Intro
     1: Continue playing
     2. Save game
     3: Quit"
+  end
+
+  def intro_menu_input(game)
+    choice = gets.chomp.to_i
+    case choice
+    when 1
+      puts 'new game'
+    when 2
+      puts 'load saved game'
+    when 3
+      puts "\nR U L E S:  How to Play Hangman
+    a. The computer picks a word of length N from the dictionary at random.
+    b. The player must guess that word, which is comprised of letters from the alphabet (characters from a-z).
+    c. The player gets at most 6 guesses to guess the correct word.
+    d. The player may guess individual letters, or whole words.
+    e. To guess whole words, precede the input with a '-w' flag.
+    f. For example, to guess the word 'supercalifragilisticexpialidocious', enter:
+
+         -w supercalifragilisticexpialidocious
+
+    g. Have fun!
+      "
+      show_intro_menu
+      intro_menu_input(game)
+    when 4
+      exit_game
+      'exit'
+    else
+      puts "\nInvalid input: #{choice}. Pick an option from the menu."
+      show_intro_menu
+      intro_menu_input(game)
+    end
   end
 
   def outro_menu_input(game)
@@ -235,7 +268,9 @@ class Hangman
   end
 
   def new_game
-    @intro.game_intro
+    flag = @intro.game_intro(self)
+    return if flag == 'exit'
+
     make_display
     continue
   end
