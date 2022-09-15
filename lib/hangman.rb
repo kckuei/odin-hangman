@@ -161,9 +161,8 @@ class Intro
     when 1
       puts "New game selected!\n\n"
     when 2
-      ## placeholder for loading
-      # game.serializer.class.list_hangman_saves
-      # game.serializer.deserialize()
+      puts "Load saved game selected!\n\n"
+      game.load_game
       puts 'load saved game'
     when 3
       puts "\nR U L E S:  How to Play Hangman
@@ -216,7 +215,7 @@ end
 
 # Hangman class
 class Hangman
-  attr_reader :dict, :intro, :serializer
+  attr_reader :dict, :intro, :serializer, :player, :computer, :display
 
   include Graphics
 
@@ -233,8 +232,13 @@ class Hangman
     @serializer.serialize(self)
   end
 
-  def load_game(path)
-    ## placeholder
+  def load_game
+    obj = @serializer.deserialize
+    # puts obj.instance_variables
+    @dict = obj.dict
+    @player = obj.player
+    @computer = obj.computer
+    @display = obj.display
   end
 
   def make_display
@@ -346,12 +350,13 @@ class Serializer
   else
     str = file.read
     file.close
-    Marshal.load(str)
+    game_obj = Marshal.load(str)
     puts 'Successfully loaded game...'
     # game = Marshal.load(str)
     # game.continue
   ensure
     puts "**Excited R2D2 noises**\n"
+    return game_obj
   end
 
   def self.list_hangman_saves
