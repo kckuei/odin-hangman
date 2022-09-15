@@ -1,5 +1,5 @@
 # odin-hangman
-Toy command line Hangman game implemented with `ruby` using OOP and mixins. Includes I/O serialization/deserialization for saving and loading game state.
+Toy command line Hangman game implemented with `ruby` using OOP and mixins. Includes I/O serialization/deserialization for saving and loading game state. [👉Live demo👈](https://replit.com/@KevinKuei/Hangman#main.rb).
 
 ### Background
 * [Hangman wiki](https://en.wikipedia.org/wiki/Hangman_(game))
