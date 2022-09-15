@@ -159,8 +159,11 @@ class Intro
     choice = gets.chomp.to_i
     case choice
     when 1
-      puts 'new game'
+      puts "New game selected!\n\n"
     when 2
+      ## placeholder for loading
+      # game.serializer.class.list_hangman_saves
+      # game.serializer.deserialize()
       puts 'load saved game'
     when 3
       puts "\nR U L E S:  How to Play Hangman
@@ -193,7 +196,10 @@ class Intro
     when 1
       game.continue
     when 2
-      ## placeholder for save_game
+      puts game.serializer
+      game.serializer.serialize(game)
+      show_outro_menu
+      outro_menu_input(game)
     when 3
       exit_game
     else
@@ -210,7 +216,7 @@ end
 
 # Hangman class
 class Hangman
-  attr_reader :dict, :intro
+  attr_reader :dict, :intro, :serializer
 
   include Graphics
 
@@ -219,6 +225,7 @@ class Hangman
     @dict = Dictionary.new('./../dictionary/google-10000-english-no-swears.txt', 1337)
     @player = Human.new
     @computer = Computer.new
+    @serializer = Serializer.new
     @display = nil
   end
 
@@ -313,9 +320,15 @@ class Serializer
   end
 
   def serialize(game)
-    Dir.mkdir(@dirname) unless File.exist? dirname
+    Dir.mkdir(@dirname) unless File.exist? @dirname
     str = Marshal.dump(game)
     File.open(@dirname << '/saved_state.hangman', 'w') { |f| f.puts(str) }
+  rescue StandardError => e
+    puts "Ran into an error when opening the hangman save file: #{e}"
+  else
+    puts 'Successfully saved game...'
+  ensure
+    puts "**Excited R2D2 noises**\n"
   end
 
   def deserialize
@@ -326,10 +339,11 @@ class Serializer
     str = file.read
     file.close
     Marshal.load(str)
+    puts 'Successfully loaded game...'
     # game = Marshal.load(str)
     # game.continue
   ensure
-    puts '**Excited R2D2 noises**'
+    puts "**Excited R2D2 noises**\n"
   end
 
   def self.list_hangman_saves
