@@ -197,7 +197,7 @@ class Intro
       game.continue
     when 2
       puts game.serializer
-      game.serializer.serialize(game)
+      game.save_game
       show_outro_menu
       outro_menu_input(game)
     when 3
@@ -227,6 +227,14 @@ class Hangman
     @computer = Computer.new
     @serializer = Serializer.new
     @display = nil
+  end
+
+  def save_game
+    @serializer.serialize(self)
+  end
+
+  def load_game(path)
+    ## placeholder
   end
 
   def make_display
