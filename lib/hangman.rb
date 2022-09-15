@@ -143,7 +143,7 @@ class Intro
   def show_intro_menu
     puts "\nMenu:
     1: Play new game
-    2. Load saved game
+    2. Continue last game
     3: Help/How to play
     4: Quit"
   end
@@ -163,7 +163,6 @@ class Intro
     when 2
       puts "Load saved game selected!\n\n"
       game.load_game
-      puts 'load saved game'
     when 3
       puts "\nR U L E S:  How to Play Hangman
     a. The computer picks a word of length N from the dictionary at random.
@@ -244,7 +243,7 @@ class Hangman
   def make_display
     word = @computer.choose_word(@dict)
     @display = Display.new(word)
-    puts "Computer chose a word: #{word}" # uncomment for debugging
+    # puts "Computer chose a word: #{word}" # uncomment for debugging
   end
 
   def game_over?(guesses, word)
